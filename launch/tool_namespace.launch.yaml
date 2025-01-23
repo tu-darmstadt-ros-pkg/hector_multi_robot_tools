@@ -1,0 +1,19 @@
+launch:
+- arg:
+    name: pkg
+- arg:
+    name: exec
+- arg:
+    name: namespace
+    default: ""
+
+- node:
+    pkg: "$(var pkg)"
+    exec: "$(var exec)"
+    # name: "name"
+    namespace: "$(var namespace)"
+    remap:
+        - from: "/tf"
+          to: "tf"
+        - from: "/tf_static"
+          to: "tf_static"
