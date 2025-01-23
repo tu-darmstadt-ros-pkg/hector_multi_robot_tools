@@ -1,8 +1,9 @@
 # multi_robot_tool_launch.bash - Defines wrappers for common ros tools to start them in a robot namespace
 
 # Function to get valid robot names by searching for robot_description topic
+# Searches for topics that end in '/robot_description', takes the preceeding part and removes the leading slash.
 get_robot_names() {
-    ros2 topic list | grep robot_description | awk -F'/' '{print $2}'
+    ros2 topic list | grep '/robot_description$' | sed 's:/robot_description$::' | sed 's:^/::'
 }
 
 # Function to display help message
