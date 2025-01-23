@@ -1,0 +1,3 @@
+#!/bin/bash
+
+source @CMAKE_INSTALL_PREFIX@/share/@PROJECT_NAME@/scripts/multi_robot_tool_launch.bash
