@@ -1,9 +1,21 @@
 launch:
 - arg:
     name: namespace
+    default: ""
 
 - node:
     pkg: "hector_multi_robot_tools"
     exec: "prefix_tf_republisher"
-    name: "prefix_tf_republisher"
+    name: "tf_republisher"
     namespace: "$(var namespace)"
+
+- node:
+    pkg: "hector_multi_robot_tools"
+    exec: "prefix_tf_republisher"
+    name: "tf_static_republisher"
+    namespace: "$(var namespace)"
+    remap:
+        - from: "tf"
+          to: "tf_static"
+        - from: "/tf"
+          to: "/tf_static"

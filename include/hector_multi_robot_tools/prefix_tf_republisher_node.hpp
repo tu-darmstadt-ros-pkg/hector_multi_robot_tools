@@ -11,7 +11,9 @@ public:
     PrefixTfRepublisherNode();
     PrefixTfRepublisherNode(const rclcpp::NodeOptions& options);
 private:
-    void tfMessageCallback(const tf2_msgs::msg::TFMessage& msg) const;
+    void tfMessageCallback(const tf2_msgs::msg::TFMessage& msg);
+
+    std::optional<rclcpp::QoS> tryDiscoverQoSProfile(const std::string& topic) const;
 
     static void prependFramePrefix(tf2_msgs::msg::TFMessage& tf_message, std::string prefix);
     static std::string stripLeadingSlash(const std::string& frame_id);
