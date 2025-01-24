@@ -25,3 +25,32 @@ If there are multiple available, the global namespace is used instead. Add the p
 ```
 mrviz --global
 ```
+
+## prefix_tf_republisher
+Republishes a `tf` topic from a namespaced topic to the global one. The frame prefix is automatically determined from the node's namespace or can be set with the `frame_prefix` parameter.
+
+Example usage:
+
+```
+launch:
+- arg:
+    name: namespace
+    default: ""
+# republish tf
+- node:
+    pkg: "hector_multi_robot_tools"
+    exec: "prefix_tf_republisher"
+    name: "tf_republisher"
+    namespace: "$(var namespace)"
+# republish tf_static
+- node:
+    pkg: "hector_multi_robot_tools"
+    exec: "prefix_tf_republisher"
+    name: "tf_static_republisher"
+    namespace: "$(var namespace)"
+    remap:
+        - from: "tf"
+          to: "tf_static"
+        - from: "/tf"
+          to: "/tf_static"
+```
