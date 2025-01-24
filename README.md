@@ -31,7 +31,7 @@ Republishes a `tf` topic from a namespaced topic to the global one. The frame pr
 
 Example usage:
 
-```
+```yaml
 launch:
 - arg:
     name: namespace
