@@ -1,0 +1,9 @@
+launch:
+- arg:
+    name: namespace
+
+- node:
+    pkg: "hector_multi_robot_tools"
+    exec: "prefix_tf_republisher"
+    name: "prefix_tf_republisher"
+    namespace: "$(var namespace)"
