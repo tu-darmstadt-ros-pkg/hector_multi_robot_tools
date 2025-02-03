@@ -11,7 +11,7 @@ public:
     PrefixTfRepublisherNode();
     PrefixTfRepublisherNode(const rclcpp::NodeOptions& options);
 private:
-    void tfMessageCallback(const tf2_msgs::msg::TFMessage& msg);
+    void tfMessageCallback(const tf2_msgs::msg::TFMessage& msg) const;
 
     std::optional<rclcpp::QoS> tryDiscoverQoSProfile(const std::string& topic) const;
 

@@ -28,12 +28,12 @@ PrefixTfRepublisherNode::PrefixTfRepublisherNode(const rclcpp::NodeOptions &opti
         qos = tryDiscoverQoSProfile(input_topic);
     }
 
-    pub_ = create_publisher<tf2_msgs::msg::TFMessage>("/tf", qos.value());
-    sub_ = create_subscription<tf2_msgs::msg::TFMessage>("tf", qos.value(),
-        std::bind( &PrefixTfRepublisherNode::tfMessageCallback, this, std::placeholders::_1 ));
+    pub_ = create_publisher<tf2_msgs::msg::TFMessage>("output_tf_topic", qos.value());
+    sub_ = create_subscription<tf2_msgs::msg::TFMessage>("input_tf_topic", qos.value(),
+        std::bind(&PrefixTfRepublisherNode::tfMessageCallback, this, std::placeholders::_1));
 }
 
-void PrefixTfRepublisherNode::tfMessageCallback(const tf2_msgs::msg::TFMessage &msg) {
+void PrefixTfRepublisherNode::tfMessageCallback(const tf2_msgs::msg::TFMessage &msg) const {
     tf2_msgs::msg::TFMessage msg_copy = msg;
     prependFramePrefix(msg_copy, frame_prefix_);
     pub_->publish(msg_copy);

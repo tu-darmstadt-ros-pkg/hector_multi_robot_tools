@@ -8,6 +8,11 @@ launch:
     exec: "prefix_tf_republisher"
     name: "tf_republisher"
     namespace: "$(var namespace)"
+    remap:
+        - from: "input_tf_topic"
+          to: "tf"
+        - from: "output_tf_topic"
+          to: "/tf"
 
 - node:
     pkg: "hector_multi_robot_tools"
@@ -15,7 +20,7 @@ launch:
     name: "tf_static_republisher"
     namespace: "$(var namespace)"
     remap:
-        - from: "tf"
+        - from: "input_tf_topic"
           to: "tf_static"
-        - from: "/tf"
+        - from: "output_tf_topic"
           to: "/tf_static"
