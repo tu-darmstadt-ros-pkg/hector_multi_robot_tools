@@ -58,7 +58,7 @@ std::optional<rclcpp::QoS> PrefixTfRepublisherNode::tryDiscoverQoSProfile(const 
     // Always use automatic liveliness
     qos.liveliness(rclcpp::LivelinessPolicy::Automatic);
 
-    // Reliability and durability policies can cause trouble with enpoint matching
+    // Reliability and durability policies can cause trouble with endpoint matching
     // Count number of "reliable" publishers and number of "transient local" publishers
     std::size_t reliable_count = 0u;
     std::size_t transient_local_count = 0u;
