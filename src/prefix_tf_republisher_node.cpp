@@ -107,18 +107,17 @@ std::optional<rclcpp::QoS> PrefixTfRepublisherNode::tryDiscoverQoSProfile(const 
     return qos;
 }
 
-void PrefixTfRepublisherNode::prependFramePrefix(tf2_msgs::msg::TFMessage &tf_message, std::string prefix) {
+void prependFramePrefix(tf2_msgs::msg::TFMessage &tf_message, const std::string& prefix) {
     for (auto& msg: tf_message.transforms) {
         msg.child_frame_id = prefix + "/" + msg.child_frame_id;
         msg.header.frame_id = prefix + "/" + msg.header.frame_id;
     }
 }
 
-std::string PrefixTfRepublisherNode::stripLeadingSlash(const std::string &frame_id) {
+std::string stripLeadingSlash(const std::string& frame_id) {
     if (!frame_id.empty() && frame_id.front() == '/') {
         return frame_id.substr(1, frame_id.size() - 1);
-    } else {
-        return frame_id;
     }
+    return frame_id;
 }
 }
