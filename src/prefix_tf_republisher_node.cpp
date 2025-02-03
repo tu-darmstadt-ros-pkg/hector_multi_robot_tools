@@ -24,7 +24,7 @@ PrefixTfRepublisherNode::PrefixTfRepublisherNode(const rclcpp::NodeOptions &opti
     rclcpp::Rate rate(10);
     while (!qos) {
         rate.sleep();
-        RCLCPP_INFO_STREAM_THROTTLE(get_logger(), *get_clock(), 1, "Waiting for input topic QoS profile.");
+        RCLCPP_INFO_STREAM_THROTTLE(get_logger(), *get_clock(), 1000, "Waiting for input topic QoS profile.");
         qos = tryDiscoverQoSProfile(input_topic);
     }
 
