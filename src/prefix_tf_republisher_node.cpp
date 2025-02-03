@@ -19,7 +19,7 @@ PrefixTfRepublisherNode::PrefixTfRepublisherNode(const rclcpp::NodeOptions &opti
     frame_prefix_ = declare_parameter("frame_prefix", default_frame_prefix);
     RCLCPP_INFO_STREAM(get_logger(), "Republishing tf frame ids with prefix '" << frame_prefix_ << "'");
 
-    const std::string input_topic = "tf";
+    const std::string input_topic = "input_tf_topic";
     std::optional<rclcpp::QoS> qos;
     rclcpp::Rate rate(10);
     while (!qos) {
@@ -29,7 +29,7 @@ PrefixTfRepublisherNode::PrefixTfRepublisherNode(const rclcpp::NodeOptions &opti
     }
 
     pub_ = create_publisher<tf2_msgs::msg::TFMessage>("output_tf_topic", qos.value());
-    sub_ = create_subscription<tf2_msgs::msg::TFMessage>("input_tf_topic", qos.value(),
+    sub_ = create_subscription<tf2_msgs::msg::TFMessage>(input_topic, qos.value(),
         std::bind(&PrefixTfRepublisherNode::tfMessageCallback, this, std::placeholders::_1));
 }
 
