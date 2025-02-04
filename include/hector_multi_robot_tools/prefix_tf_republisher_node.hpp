@@ -21,8 +21,6 @@ private:
     std::string frame_prefix_;
 };
 
-    void prependFramePrefix(tf2_msgs::msg::TFMessage& tf_message, const std::string& prefix);
-    std::string stripLeadingSlash(const std::string& frame_id);
 }
 
 #endif

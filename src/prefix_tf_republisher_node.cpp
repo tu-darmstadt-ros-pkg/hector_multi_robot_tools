@@ -1,5 +1,21 @@
 #include <hector_multi_robot_tools/prefix_tf_republisher_node.hpp>
 
+namespace {
+void prependFramePrefix(tf2_msgs::msg::TFMessage &tf_message, const std::string& prefix) {
+    for (auto& msg: tf_message.transforms) {
+        msg.child_frame_id = prefix + "/" + msg.child_frame_id;
+        msg.header.frame_id = prefix + "/" + msg.header.frame_id;
+    }
+}
+
+std::string stripLeadingSlash(const std::string& frame_id) {
+    if (!frame_id.empty() && frame_id.front() == '/') {
+        return frame_id.substr(1, frame_id.size() - 1);
+    }
+    return frame_id;
+}
+}
+
 namespace hector_multi_robot_tools {
 PrefixTfRepublisherNode::PrefixTfRepublisherNode() : PrefixTfRepublisherNode(rclcpp::NodeOptions()) {
 }
@@ -105,19 +121,5 @@ std::optional<rclcpp::QoS> PrefixTfRepublisherNode::tryDiscoverQoSProfile(const 
     qos.lifespan(max_lifespan);
 
     return qos;
-}
-
-void prependFramePrefix(tf2_msgs::msg::TFMessage &tf_message, const std::string& prefix) {
-    for (auto& msg: tf_message.transforms) {
-        msg.child_frame_id = prefix + "/" + msg.child_frame_id;
-        msg.header.frame_id = prefix + "/" + msg.header.frame_id;
-    }
-}
-
-std::string stripLeadingSlash(const std::string& frame_id) {
-    if (!frame_id.empty() && frame_id.front() == '/') {
-        return frame_id.substr(1, frame_id.size() - 1);
-    }
-    return frame_id;
 }
 }
