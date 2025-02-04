@@ -8,6 +8,9 @@ launch:
     exec: "prefix_tf_republisher"
     name: "tf_republisher"
     namespace: "$(var namespace)"
+    param:
+        - name: "global_frames"
+          value: ["world"]
     remap:
         - from: "input_tf_topic"
           to: "tf"
@@ -19,6 +22,9 @@ launch:
     exec: "prefix_tf_republisher"
     name: "tf_static_republisher"
     namespace: "$(var namespace)"
+    param:
+        - name: "global_frames"
+          value: ["world"]
     remap:
         - from: "input_tf_topic"
           to: "tf_static"
