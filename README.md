@@ -27,11 +27,22 @@ mrviz --global
 ```
 
 ## prefix_tf_republisher
-Republishes a `tf` topic from a namespaced topic to the global one. The frame prefix is automatically determined from the node's namespace or can be set with the `frame_prefix` parameter. 
+Republishes a `tf` topic from a namespaced topic to the global one with a robot-specific prefix attached to the frame id. The frame prefix is automatically determined from the node's namespace or can be set with the `frame_prefix` parameter. 
 
+### Parameters
+
+* `frame_prefix` (string, default: node namespace)
+
+    Override the automatically-determined frame prefix.
+
+* `global_frames` (string[], default: [])
+
+    List of global frames that are relayed without a prefix.
+  
+### Subscribers & Publishers  
 The node subscribes to `input_tf_topic` and publishes to `output_tf_topic` which need to be remapped accordingly.
 
-Example usage:
+### Example Usage
 
 ```yaml
 launch:
@@ -44,6 +55,9 @@ launch:
     exec: "prefix_tf_republisher"
     name: "tf_republisher"
     namespace: "$(var namespace)"
+    param:
+        - name: "global_frames"
+          value: ["world"]
     remap:
         - from: "input_tf_topic"
           to: "tf"
@@ -55,6 +69,9 @@ launch:
     exec: "prefix_tf_republisher"
     name: "tf_static_republisher"
     namespace: "$(var namespace)"
+    param:
+        - name: "global_frames"
+          value: ["world"]
     remap:
         - from: "input_tf_topic"
           to: "tf_static"
