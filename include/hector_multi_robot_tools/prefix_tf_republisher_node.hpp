@@ -9,7 +9,7 @@ namespace hector_multi_robot_tools {
 class PrefixTfRepublisherNode : public rclcpp::Node {
 public:
     PrefixTfRepublisherNode();
-    PrefixTfRepublisherNode(const rclcpp::NodeOptions& options);
+    explicit PrefixTfRepublisherNode(const rclcpp::NodeOptions& options);
 private:
     void tfMessageCallback(const tf2_msgs::msg::TFMessage& msg) const;
 

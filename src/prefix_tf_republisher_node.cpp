@@ -21,7 +21,7 @@ PrefixTfRepublisherNode::PrefixTfRepublisherNode() : PrefixTfRepublisherNode(rcl
 }
 
 PrefixTfRepublisherNode::PrefixTfRepublisherNode(const rclcpp::NodeOptions &options)
-    : rclcpp::Node("prefix_tf_republisher_node", options)
+    : Node("prefix_tf_republisher_node", options)
 {
     if (get_effective_namespace() == "/") {
         RCLCPP_FATAL_STREAM(get_logger(), "Node is started in global namespace. This will lead to a topic loop.");
