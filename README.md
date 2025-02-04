@@ -27,7 +27,9 @@ mrviz --global
 ```
 
 ## prefix_tf_republisher
-Republishes a `tf` topic from a namespaced topic to the global one. The frame prefix is automatically determined from the node's namespace or can be set with the `frame_prefix` parameter.
+Republishes a `tf` topic from a namespaced topic to the global one. The frame prefix is automatically determined from the node's namespace or can be set with the `frame_prefix` parameter. 
+
+The node subscribes to `input_tf_topic` and publishes to `output_tf_topic` which need to be remapped accordingly.
 
 Example usage:
 
@@ -42,6 +44,11 @@ launch:
     exec: "prefix_tf_republisher"
     name: "tf_republisher"
     namespace: "$(var namespace)"
+    remap:
+        - from: "input_tf_topic"
+          to: "tf"
+        - from: "output_tf_topic"
+          to: "/tf"
 # republish tf_static
 - node:
     pkg: "hector_multi_robot_tools"
@@ -49,8 +56,8 @@ launch:
     name: "tf_static_republisher"
     namespace: "$(var namespace)"
     remap:
-        - from: "tf"
+        - from: "input_tf_topic"
           to: "tf_static"
-        - from: "/tf"
+        - from: "output_tf_topic"
           to: "/tf_static"
 ```
