@@ -1,12 +1,6 @@
 #include <hector_multi_robot_tools/prefix_tf_republisher_node.hpp>
 
 namespace {
-void prependFramePrefix(tf2_msgs::msg::TFMessage &tf_message, const std::string& prefix) {
-    for (auto& msg: tf_message.transforms) {
-        msg.child_frame_id = prefix + "/" + msg.child_frame_id;
-        msg.header.frame_id = prefix + "/" + msg.header.frame_id;
-    }
-}
 
 std::string stripLeadingSlash(const std::string& frame_id) {
     if (!frame_id.empty() && frame_id.front() == '/') {
@@ -32,8 +26,13 @@ PrefixTfRepublisherNode::PrefixTfRepublisherNode(const rclcpp::NodeOptions &opti
     frame_prefix_descriptor.description = "Frame prefix to prepend on frame_id (default: node namespace)";
     frame_prefix_descriptor.read_only = true;
     std::string default_frame_prefix = stripLeadingSlash(get_effective_namespace());
-    frame_prefix_ = declare_parameter("frame_prefix", default_frame_prefix);
+    frame_prefix_ = declare_parameter("frame_prefix", default_frame_prefix, frame_prefix_descriptor);
     RCLCPP_INFO_STREAM(get_logger(), "Republishing tf frame ids with prefix '" << frame_prefix_ << "'");
+
+    rcl_interfaces::msg::ParameterDescriptor global_frames_descriptor;
+    global_frames_descriptor.description = "Global frames are republished without attaching the robot-specific prefix.";
+    global_frames_descriptor.read_only = true;
+    global_frames_ = declare_parameter("global_frames", std::vector<std::string>(), global_frames_descriptor);
 
     const std::string input_topic = "input_tf_topic";
     std::optional<rclcpp::QoS> qos;
@@ -51,8 +50,25 @@ PrefixTfRepublisherNode::PrefixTfRepublisherNode(const rclcpp::NodeOptions &opti
 
 void PrefixTfRepublisherNode::tfMessageCallback(const tf2_msgs::msg::TFMessage &msg) const {
     tf2_msgs::msg::TFMessage msg_copy = msg;
-    prependFramePrefix(msg_copy, frame_prefix_);
+    prependFramePrefixToMsg(msg_copy, frame_prefix_);
     pub_->publish(msg_copy);
+}
+
+void PrefixTfRepublisherNode::prependFramePrefixToMsg(tf2_msgs::msg::TFMessage &tf_message, const std::string &prefix) const {
+    for (auto& msg: tf_message.transforms) {
+        msg.child_frame_id = preprendFramePrefix(msg.child_frame_id, prefix);
+        msg.header.frame_id = preprendFramePrefix(msg.header.frame_id, prefix);
+    }
+}
+
+std::string PrefixTfRepublisherNode::preprendFramePrefix(const std::string &frame_id, const std::string &prefix) const {
+    auto it = std::find(global_frames_.begin(), global_frames_.end(), frame_id);
+    if (it != global_frames_.end()) {
+        // Frame is a global frame
+        return frame_id;
+    }
+    // Frame is a local frame, attach prefix
+    return  prefix + "/" + frame_id;
 }
 
 std::optional<rclcpp::QoS> PrefixTfRepublisherNode::tryDiscoverQoSProfile(const std::string& topic) const {
