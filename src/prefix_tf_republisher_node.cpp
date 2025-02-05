@@ -26,13 +26,13 @@ PrefixTfRepublisherNode::PrefixTfRepublisherNode(const rclcpp::NodeOptions &opti
     frame_prefix_descriptor.description = "Frame prefix to prepend on frame_id (default: node namespace)";
     frame_prefix_descriptor.read_only = true;
     std::string default_frame_prefix = stripLeadingSlash(get_effective_namespace());
-    frame_prefix_ = declare_parameter("frame_prefix", default_frame_prefix);
+    frame_prefix_ = declare_parameter("frame_prefix", default_frame_prefix, frame_prefix_descriptor);
     RCLCPP_INFO_STREAM(get_logger(), "Republishing tf frame ids with prefix '" << frame_prefix_ << "'");
 
     rcl_interfaces::msg::ParameterDescriptor global_frames_descriptor;
     global_frames_descriptor.description = "Global frames are republished without attaching the robot-specific prefix.";
     global_frames_descriptor.read_only = true;
-    global_frames_ = declare_parameter("global_frames", std::vector<std::string>());
+    global_frames_ = declare_parameter("global_frames", std::vector<std::string>(), global_frames_descriptor);
 
     const std::string input_topic = "input_tf_topic";
     std::optional<rclcpp::QoS> qos;
