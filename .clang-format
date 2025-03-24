@@ -18,7 +18,7 @@ BraceWrapping:
   AfterNamespace: false
   AfterStruct: true
   BeforeCatch: true
-  BeforeElse: true
+  BeforeElse: false
   IndentBraces: false
   SplitEmptyFunction: false
 BreakBeforeBraces: Custom
